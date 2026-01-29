@@ -3,6 +3,7 @@ from fastapi import APIRouter, Depends
 
 from app.core.container import Container
 from app.core.middleware import inject
+from app.core.dependencies import get_current_active_user, get_current_super_user
 from app.core.security import JWTBearer
 from app.schema.base_schema import Blank
 from app.schema.pet_schema import FindPet, FindPetResult, Pet, UpsertPet
@@ -16,6 +17,7 @@ router = APIRouter(prefix="/pet", tags=["pet"], dependencies=[Depends(JWTBearer(
 def create_pet(
     pet: UpsertPet,
     service: PetService = Depends(Provide[Container.pet_service]),
+    current_user: object = Depends(get_current_super_user),
 ):
     return service.add(pet)
 
@@ -25,6 +27,7 @@ def create_pet(
 def get_pet_list(
     find_query: FindPet = Depends(),
     service: PetService = Depends(Provide[Container.pet_service]),
+    current_user: object = Depends(get_current_active_user),
 ):
     return service.get_list(find_query)
 
@@ -34,6 +37,7 @@ def get_pet_list(
 def get_pet(
     pet_id: int,
     service: PetService = Depends(Provide[Container.pet_service]),
+    current_user: object = Depends(get_current_active_user),
 ):
     return service.get_by_id(pet_id)
 
@@ -44,6 +48,7 @@ def update_pet(
     pet_id: int,
     pet: UpsertPet,
     service: PetService = Depends(Provide[Container.pet_service]),
+    current_user: object = Depends(get_current_super_user),
 ):
     return service.patch(pet_id, pet)
 
@@ -53,6 +58,7 @@ def update_pet(
 def delete_pet(
     pet_id: int,
     service: PetService = Depends(Provide[Container.pet_service]),
+    current_user: object = Depends(get_current_super_user),
 ):
     service.remove_by_id(pet_id)
     return Blank()

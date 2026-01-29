@@ -37,6 +37,11 @@ class Configs(BaseSettings):
     SECRET_KEY: str = os.getenv("SECRET_KEY", "")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30  # 60 minutes * 24 hours * 30 days = 30 days
 
+    # keycloak
+    KEYCLOAK_SERVER_URL: str = os.getenv("KEYCLOAK_SERVER_URL", "")
+    KEYCLOAK_REALM: str = os.getenv("KEYCLOAK_REALM", "")
+    KEYCLOAK_PUBLIC_KEY: str = os.getenv("KEYCLOAK_PUBLIC_KEY", "")
+
     # CORS
     BACKEND_CORS_ORIGINS: List[str] = ["*"]
 

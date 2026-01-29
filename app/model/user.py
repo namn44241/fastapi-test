@@ -7,6 +7,7 @@ class User(BaseModel, table=True):
     email: str = Field(unique=True)
     password: str = Field()
     user_token: str = Field(unique=True)
+    keycloak_sub: str = Field(default=None, nullable=True, unique=True)
 
     name: str = Field(default=None, nullable=True)
     is_active: bool = Field(default=True)
